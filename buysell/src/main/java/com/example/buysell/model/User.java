@@ -35,7 +35,8 @@ public class User implements UserDetails {
     @Column(name = "password", length = 1000)
     private String password;
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
-    @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
+    @CollectionTable(name = "user_role",
+            joinColumns = @JoinColumn(name = "user_id"))
     @Enumerated(EnumType.STRING)
     private Set<Role> roles = new HashSet<>();
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER,
@@ -50,6 +51,9 @@ public class User implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return roles;
+    }
+    public boolean isAdmin(){
+        return roles.contains(Role.ROLE_ADMIN);
     }
 
     @Override
